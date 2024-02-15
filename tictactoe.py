@@ -31,8 +31,14 @@ class TicTacToe:
             return PlayerType.O
 
     def play(self) -> None:
+        """Plays one game of Tic-Tac-Toe"""
         # 1. determine which player, X or O will go first
         player = self.get_starting_player()
         print(f'starting player = {player}')
 
-        # 2. keep playing until either (a) there is a winner or (b) it is a tie
+        # 2. keep playing until either 
+        #    (a) there is a winner or
+        #    (b) it is a tie
+        while self.game_outcome == GameOutcome.unknown:
+            # temporary exit logic
+            self.game_outcome = GameOutcome.tie
