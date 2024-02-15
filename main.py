@@ -8,15 +8,15 @@ def get_python_version() -> str:
 
 
 def get_play_again_decision() -> bool:
+    """Returns True if the player wants to play again; otherwise returns False"""
     resp = input('Do you want to play again? (y/n)?> ')
-    play_again = False
+    
     if resp is None or len(resp) == 0:
-        play_again = True
+        return True
     else:
         resp = resp[:1].lower()
-        play_again = resp == 'y'
-    return play_again
-
+        return resp == 'y'
+    
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
