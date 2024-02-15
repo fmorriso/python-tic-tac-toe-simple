@@ -3,12 +3,12 @@ from enum import Enum
 
 class BoardLocation(Enum):
     """The symbolic locations of each possible position on the game board"""
-    TL = 0
-    TM = 1
-    TR = 2
-    ML = 3
-    M = 4
-    MR = 5
-    BL = 6
-    BM = 7
-    BR = 8
+    TL = 0 # top-left
+    TM = 1 # top-middle
+    TR = 2 # top-right
+    ML = 3 # middle-left
+    M = 4  # middle
+    MR = 5 # middle-right
+    BL = 6 # bottom-left
+    BM = 7 # bottom-middle
+    BR = 8 # bottom-right
