@@ -17,10 +17,9 @@ def get_play_again_decision() -> bool:
 if __name__ == '__main__':
     print(f'Python version {get_python_version()}')
 
+    game = TicTacToe()
     # allow the game to be played multiple times if desired
     while True:
-        game = TicTacToe()
-
         game.play()
 
         if get_play_again_decision():
