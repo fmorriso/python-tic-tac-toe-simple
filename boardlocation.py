@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import IntEnum
 
 
-class BoardLocation(Enum):
+class BoardLocation(IntEnum):
     """The symbolic locations of each possible position on the game board"""
     TL = 0 # top-left
     TM = 1 # top-middle

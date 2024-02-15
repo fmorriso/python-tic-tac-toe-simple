@@ -1,6 +1,5 @@
 import random
 
-from boardlocation import BoardLocation
 from game_outcome import GameOutcome
 from player_type import PlayerType
 
@@ -42,3 +41,9 @@ class TicTacToe:
         while self.game_outcome == GameOutcome.unknown:
             # temporary exit logic
             self.game_outcome = GameOutcome.tie
+
+    def get_play_again_decision(self) -> bool:
+        """Returns True if the player wants to play again; otherwise returns False"""
+        resp: str = input('Do you want to play again? (y/n)?>')
+        # treat Enter key same as entering y
+        return resp is None or len(resp) == 0 or resp[:1].lower() == 'y'
