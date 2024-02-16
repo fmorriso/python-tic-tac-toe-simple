@@ -1,7 +1,8 @@
-from enum import auto, StrEnum
+from enum import StrEnum
 
 
 class PlayerType(StrEnum):
     """The type of player, X or O"""
-    X = 'X'
-    O = 'O'
+    X: str = 'X'
+    O: str = 'O'
+    NONE: str = ' '

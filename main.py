@@ -3,6 +3,7 @@ import sys
 from tictactoe import TicTacToe
 
 
+@staticmethod
 def get_python_version() -> str:
     return f'{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}'
 
