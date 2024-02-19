@@ -13,10 +13,11 @@ if __name__ == '__main__':
 
     game = TicTacToe()
     # allow the game to be played multiple times if desired
-    while True:
+    keep_playing: bool = True
+    while keep_playing:
         game.play()
-
-        if game.get_play_again_decision():
+        keep_playing = game.get_play_again_decision()
+        if keep_playing:
             game.start_new_game()
         else:
             print('Thanks for playing')

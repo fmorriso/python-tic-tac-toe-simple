@@ -1,7 +1,5 @@
 import random
 
-from pyautogui import FAILSAFE
-
 from boardlocation import BoardLocation
 from game_outcome import GameOutcome
 from player_type import PlayerType
@@ -10,9 +8,9 @@ from player_type import PlayerType
 class TicTacToe:
     def __init__(self):
         self.board: list[PlayerType] = []
+        # initialize the board so that no player occupies any of the squares
         for i in range(9):
             self.board.append(PlayerType.NONE)
-        print(f'DEBUG: the type of self.board[0] is {type(self.board[0])}')
         self.game_outcome = None
         self.player = PlayerType.X
         self.start_new_game()
@@ -24,7 +22,6 @@ class TicTacToe:
             self.board.append(PlayerType.NONE)
         # the game outcome is now unknown
         self.game_outcome = GameOutcome.IN_PROGRESS
-        print(f'DEBUG: the type of self.board[0] is {type(self.board[0])}')
 
     @staticmethod
     def get_starting_player() -> PlayerType:
@@ -52,13 +49,12 @@ class TicTacToe:
     def next_player_selection(self):
         self.display_game_board()
         while True:
-            selection: str = input(f"{self.player}: which square do you want? (TL,TM, TR, ML, M, MR, BL, BM, BR)>").upper()
+            selection: str = input(
+                f"{self.player}: which square do you want? (TL,TM, TR, ML, M, MR, BL, BM, BR)>").upper()
             location = BoardLocation[selection]
-            #print(f'type of location: {type(location)}')
             who_has_this_location: PlayerType = PlayerType(self.board[location])
-            #print(f'type of position: {type(who_has_this_location)}')
             if who_has_this_location != PlayerType.NONE:
-                print(f'Position {location} is already occupied. Try a different location.')
+                print(f'Position {selection} is already occupied. Try a different location.')
             else:
                 break
 
@@ -66,12 +62,11 @@ class TicTacToe:
             print(f'Player {self.player} chose {location}')
             self.board[location] = self.player
 
-
     def display_game_board(self) -> None:
         """Displays the current game board"""
         print('-' * 13)
-        for i in [0, 3, 6]:
-            print(f'| {self.board[i]} | {self.board[i+1]} | {self.board[i+2]} |')
+        for i in [BoardLocation.TL, BoardLocation.ML, BoardLocation.BL]:
+            print(f'| {self.board[i]} | {self.board[i + 1]} | {self.board[i + 2]} |')
             print('-' * 13)
 
     def switch_player(self) -> None:
@@ -141,11 +136,11 @@ class TicTacToe:
     def check_for_consecutive(self, first: BoardLocation, second: BoardLocation,
                               third: BoardLocation) -> GameOutcome:
         if self.board[first] == PlayerType.X and \
-           self.board[second] == PlayerType.X and self.board[third] == PlayerType.X:
+                self.board[second] == PlayerType.X and self.board[third] == PlayerType.X:
             return GameOutcome.X_winner
 
         if self.board[first] == PlayerType.O and \
-           self.board[second] == PlayerType.O and self.board[third] == PlayerType.O:
+                self.board[second] == PlayerType.O and self.board[third] == PlayerType.O:
             return GameOutcome.O_winner
 
         # if there are any unused areas in the board, the game is not over yet
@@ -156,7 +151,7 @@ class TicTacToe:
         return GameOutcome.TIE
 
     def is_hopeless_tie_game(self) -> bool:
-        """ determime whether or not the game is a hopeless tie, even if there are unused squares"""
+        """ determine if the game is a hopeless tie, even if there are unused squares"""
 
         # Check for PlayerType.NONE as the only remaining choice for any
         # of the following where there are already two values OTHER than
