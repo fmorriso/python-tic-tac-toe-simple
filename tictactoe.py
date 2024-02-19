@@ -21,7 +21,7 @@ class TicTacToe:
         for i in range(9):
             self.board.append(PlayerType.NONE)
         # the game outcome is now unknown
-        self.game_outcome = GameOutcome.UNKNOWN
+        self.game_outcome = GameOutcome.IN_PROGRESS
         print(f'DEBUG: the type of self.board[0] is {type(self.board[0])}')
 
     @staticmethod
@@ -41,7 +41,7 @@ class TicTacToe:
         # 2. keep playing until either 
         #    (a) there is a winner or
         #    (b) it is a tie
-        while self.game_outcome == GameOutcome.UNKNOWN:
+        while self.game_outcome == GameOutcome.IN_PROGRESS:
             self.next_player_selection()
 
             self.switch_player()
@@ -82,7 +82,7 @@ class TicTacToe:
         """switch between player X and player O"""
         if self.player == PlayerType.X:
             self.player = PlayerType.O
-        self.player = PlayerType.X # ERROR: TicTacToe has no attribute PlayerType ???
+        self.player = PlayerType.X  # ERROR: TicTacToe has no attribute PlayerType ???
 
     @staticmethod
     def get_play_again_decision() -> bool:
@@ -94,45 +94,57 @@ class TicTacToe:
     def check_for_winner(self) -> GameOutcome:
         # 1. check for vertical three-in-a-row for either player
         result = self.check_for_consecutive(BoardLocation.TL, BoardLocation.ML, BoardLocation.BL)
-        if result != GameOutcome.UNKNOWN:
+        if result != GameOutcome.IN_PROGRESS:
             return result
 
         result = self.check_for_consecutive(BoardLocation.TM, BoardLocation.M, BoardLocation.MR)
-        if result != GameOutcome.UNKNOWN:
+        if result != GameOutcome.IN_PROGRESS:
             return result
 
         result = self.check_for_consecutive(BoardLocation.TR, BoardLocation.MR, BoardLocation.BR)
-        if result != GameOutcome.UNKNOWN:
+        if result != GameOutcome.IN_PROGRESS:
             return result
 
         # 2. check for horizontal three-in-a-row for either player
         result = self.check_for_consecutive(BoardLocation.TL, BoardLocation.TM, BoardLocation.TR)
-        if result != GameOutcome.UNKNOWN:
+        if result != GameOutcome.IN_PROGRESS:
             return result
 
         result = self.check_for_consecutive(BoardLocation.ML, BoardLocation.M, BoardLocation.MR)
-        if result != GameOutcome.UNKNOWN:
+        if result != GameOutcome.IN_PROGRESS:
             return result
 
         result = self.check_for_consecutive(BoardLocation.BL, BoardLocation.BM, BoardLocation.BR)
-        if result != GameOutcome.UNKNOWN:
+        if result != GameOutcome.IN_PROGRESS:
             return result
 
         # 3. check for Upper-Left to Bottom-Right three-in-a-row for either player
         result = self.check_for_consecutive(BoardLocation.ML, BoardLocation.M, BoardLocation.MR)
-        if result != GameOutcome.UNKNOWN:
+        if result != GameOutcome.IN_PROGRESS:
             return result
 
         # 4. check for Bottom-Left to Upper-Right three-in-a-row for either player
+        result = self.check_for_consecutive(BoardLocation.BL, BoardLocation.M, BoardLocation.TR)
+        if result != GameOutcome.IN_PROGRESS:
+            return result
+
         # 5. check for Tie
-        pass
+        # if there are any unused areas in the board, the game is not over yet
+        # TODO: improve this logic by checking for PlayerType.NONE as the only remaining choice for:
+        #       1. any veritical
+        #       2. any horizontal
+        #       3. either of the two diagonals
+        for i in range(len(self.board)):
+            if self.board[i] == PlayerType.NONE:
+                return GameOutcome.IN_PROGRESS
+
+        return GameOutcome.TIE
 
     def get_game_status(self) -> GameOutcome:
         """checks game status to see if the game is over and returns the outcome"""
         # 1. check for vertical three-in-a-row for either player
         status = self.check_for_winner()
         return status
-
 
     def check_for_consecutive(self, first: BoardLocation, second: BoardLocation,
                               third: BoardLocation) -> GameOutcome:
@@ -145,6 +157,6 @@ class TicTacToe:
         # if there are any unused areas in the board, the game is not over yet
         for i in range(len(self.board)):
             if self.board[i] == PlayerType.NONE:
-                return GameOutcome.UNKNOWN
+                return GameOutcome.IN_PROGRESS
 
         return GameOutcome.TIE
