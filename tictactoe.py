@@ -1,5 +1,7 @@
 import random
 
+from pyautogui import FAILSAFE
+
 from boardlocation import BoardLocation
 from game_outcome import GameOutcome
 from player_type import PlayerType
@@ -69,14 +71,10 @@ class TicTacToe:
 
     def display_game_board(self) -> None:
         """Displays the current game board"""
-        print(f'The size of the game board is {len(self.board)}')
-        for i in range(len(self.board)):
-            if i % 2 == 0:
-                print(self.board[i], end='')
-            else:
-                print(f'{self.board[i]} | ', end='')
-            if i % 4 == 0:
-                print()
+        print('-' * 13)
+        for i in [0, 3, 6]:
+            print(f'| {self.board[i]} | {self.board[i+1]} | {self.board[i+2]} |')
+            print('-' * 13)
 
     def switch_player(self) -> None:
         """switch between player X and player O"""
@@ -129,16 +127,11 @@ class TicTacToe:
             return result
 
         # 5. check for Tie
-        # if there are any unused areas in the board, the game is not over yet
-        # TODO: improve this logic by checking for PlayerType.NONE as the only remaining choice for:
-        #       1. any veritical
-        #       2. any horizontal
-        #       3. either of the two diagonals
-        for i in range(len(self.board)):
-            if self.board[i] == PlayerType.NONE:
-                return GameOutcome.IN_PROGRESS
+        if self.is_hopeless_tie_game():
+            return GameOutcome.TIE
 
-        return GameOutcome.TIE
+        # 6. if nobody has won and it's not a hopeless tie, the game is still in progress
+        return GameOutcome.IN_PROGRESS
 
     def get_game_status(self) -> GameOutcome:
         """checks game status to see if the game is over and returns the outcome"""
@@ -148,10 +141,12 @@ class TicTacToe:
 
     def check_for_consecutive(self, first: BoardLocation, second: BoardLocation,
                               third: BoardLocation) -> GameOutcome:
-        if self.board[first] == PlayerType.X and self.board[second] == PlayerType.X and self.board[third] == PlayerType.X:
+        if self.board[first] == PlayerType.X and \
+           self.board[second] == PlayerType.X and self.board[third] == PlayerType.X:
             return GameOutcome.X_winner
 
-        if self.board[first] == PlayerType.O and self.board[second] == PlayerType.O and self.board[third] == PlayerType.O:
+        if self.board[first] == PlayerType.O and \
+           self.board[second] == PlayerType.O and self.board[third] == PlayerType.O:
             return GameOutcome.O_winner
 
         # if there are any unused areas in the board, the game is not over yet
@@ -160,3 +155,67 @@ class TicTacToe:
                 return GameOutcome.IN_PROGRESS
 
         return GameOutcome.TIE
+
+    def is_hopeless_tie_game(self) -> bool:
+        """ determime whether or not the game is a hopeless tie, even if there are unused squares"""
+
+        # Check for PlayerType.NONE as the only remaining choice for any
+        # of the following where there are already two values OTHER than
+        # PlayerType.NONE in:
+        #       1. any of the three verticals
+        #       2. any of the three horizontals
+        #       3. either of the two diagonals
+        num_tie_areas = 0
+
+        # verticals
+        if self.is_tie_triple([BoardLocation.TL, BoardLocation.ML, BoardLocation.BL]):
+            num_tie_areas += 1
+
+        if self.is_tie_triple([BoardLocation.TM, BoardLocation.M, BoardLocation.BM]):
+            num_tie_areas += 1
+
+        if self.is_tie_triple([BoardLocation.TR, BoardLocation.MR, BoardLocation.BR]):
+            num_tie_areas += 1
+
+        # horizontals
+        if self.is_tie_triple([BoardLocation.TL, BoardLocation.TM, BoardLocation.TR]):
+            num_tie_areas += 1
+
+        if self.is_tie_triple([BoardLocation.ML, BoardLocation.M, BoardLocation.MR]):
+            num_tie_areas += 1
+
+        if self.is_tie_triple([BoardLocation.BL, BoardLocation.BM, BoardLocation.BR]):
+            num_tie_areas += 1
+
+        # diagonals
+        if self.is_tie_triple([BoardLocation.TL, BoardLocation.M, BoardLocation.BR]):
+            num_tie_areas += 1
+
+        if self.is_tie_triple([BoardLocation.TR, BoardLocation.M, BoardLocation.BL]):
+            num_tie_areas += 1
+
+        # if all eight areas where a triple can occur have at least one open square,
+        # the game is hopelessly tied
+        return num_tie_areas == 8
+
+    def is_tie_triple(self, triple=list[int]) -> bool:
+        """Return true if it is impossible for either player to complete a triple
+        within the three consecutive squares; otherwise return false"""
+        if len(triple) != 3:
+            raise ValueError(f"Expected 3 items, but got {len(triple)} instead")
+
+        n: int = 0
+        num_x: int = 0
+        num_o: int = 0
+        num_blank: int = 0
+        for i in triple:
+            if self.board[i] == PlayerType.X:
+                num_x += 1
+            elif self.board[i] == PlayerType.O:
+                num_o += 1
+            else:
+                num_blank += 1
+
+        n = num_x + num_o
+        # return true if more than one square is occupied by a player, but not by the same player
+        return n > 1 and num_x < 2 and num_o < 2
