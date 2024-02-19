@@ -52,22 +52,20 @@ class TicTacToe:
     def next_player_selection(self):
         self.display_game_board()
         while True:
-            selection: str = input("which square do you want? (TL,TM, TR, ML, M, MR, BL, BM, BR)>").upper()
+            selection: str = input(f"{self.player}: which square do you want? (TL,TM, TR, ML, M, MR, BL, BM, BR)>").upper()
             location = BoardLocation[selection]
-            print(f'type of location: {type(location)}')
+            #print(f'type of location: {type(location)}')
             who_has_this_location: PlayerType = PlayerType(self.board[location])
-            print(f'type of position: {type(who_has_this_location)}')
+            #print(f'type of position: {type(who_has_this_location)}')
             if who_has_this_location != PlayerType.NONE:
                 print(f'Position {location} is already occupied. Try a different location.')
             else:
                 break
 
-        # TODO: figure out how to keep self.board from converting from list[PlayerType] to list[str]
-        print(
-            f'type of self.board[location] is {type(self.board[location])}')  # why is self.board[location] of type str instead of PlayerType???
-        print(f'type of self.player is{type(self.player)}')
-        temp = str(self.player)
-        self.board[location] = temp
+        if location is not None:
+            print(f'Player {self.player} chose {location}')
+            self.board[location] = self.player
+
 
     def display_game_board(self) -> None:
         """Displays the current game board"""
@@ -80,7 +78,8 @@ class TicTacToe:
         """switch between player X and player O"""
         if self.player == PlayerType.X:
             self.player = PlayerType.O
-        self.player = PlayerType.X  # ERROR: TicTacToe has no attribute PlayerType ???
+        else:
+            self.player = PlayerType.X
 
     @staticmethod
     def get_play_again_decision() -> bool:
