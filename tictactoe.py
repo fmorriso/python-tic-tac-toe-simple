@@ -1,4 +1,5 @@
 import random
+from telnetlib import TM
 
 from board_location import BoardLocation
 from game_outcome import GameOutcome
@@ -41,11 +42,14 @@ class TicTacToe:
         #    (a) there is a winner or
         #    (b) it is a tie
         while self.game_outcome == GameOutcome.IN_PROGRESS:
-            self.next_player_selection()
-            self.switch_player()
-            self.game_outcome = self.get_game_status()
+            self.next_player_selection()            
+            self.game_outcome = self.check_for_winner()
+            # self.game_outcome = self.get_game_status()
             if self.game_outcome != GameOutcome.IN_PROGRESS:
                 print(f'The game has ended. Outcome: {self.game_outcome}')
+                break
+            else:
+                self.switch_player()
 
     def next_player_selection(self):
         """Ask the current player to pick a square"""
@@ -67,6 +71,7 @@ class TicTacToe:
         if location is not None:
             print(f'Player {self.player} chose {location}')
             self.board[location] = self.player
+            self.display_game_board()
 
     def display_game_board(self) -> None:
         """Displays the current game board"""
@@ -76,7 +81,7 @@ class TicTacToe:
             print('-' * 13)
 
     def switch_player(self) -> None:
-        """switch between player X and player O"""
+        """alternate between player X and player O"""
         if self.player == PlayerType.X:
             self.player = PlayerType.O
         else:
