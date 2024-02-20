@@ -71,7 +71,7 @@ class TicTacToe:
         if location is not None:
             print(f'Player {self.player} chose {location}')
             self.board[location] = self.player
-            self.display_game_board()
+            # self.display_game_board()
 
     def display_game_board(self) -> None:
         """Displays the current game board"""
