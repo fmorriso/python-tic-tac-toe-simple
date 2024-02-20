@@ -1,6 +1,6 @@
 import random
 
-from boardlocation import BoardLocation
+from board_location import BoardLocation
 from game_outcome import GameOutcome
 from player_type import PlayerType
 
@@ -51,7 +51,11 @@ class TicTacToe:
         while True:
             selection: str = input(
                 f"{self.player}: which square do you want? (TL,TM, TR, ML, M, MR, BL, BM, BR)>").upper()
-            location = BoardLocation[selection]
+            try:
+                location = BoardLocation[selection]
+            except KeyError:
+                print(f'{selection} is not valid. Try again.')
+                continue
             who_has_this_location: PlayerType = PlayerType(self.board[location])
             if who_has_this_location != PlayerType.NONE:
                 print(f'Position {selection} is already occupied. Try a different location.')
@@ -161,7 +165,7 @@ class TicTacToe:
         #       3. either of the two diagonals
         num_tie_areas = 0
 
-        # verticals
+        # verticals (left, middle, right)
         if self.is_tie_triple([BoardLocation.TL, BoardLocation.ML, BoardLocation.BL]):
             num_tie_areas += 1
 
@@ -171,7 +175,7 @@ class TicTacToe:
         if self.is_tie_triple([BoardLocation.TR, BoardLocation.MR, BoardLocation.BR]):
             num_tie_areas += 1
 
-        # horizontals
+        # horizontals (top, middle, bottom)
         if self.is_tie_triple([BoardLocation.TL, BoardLocation.TM, BoardLocation.TR]):
             num_tie_areas += 1
 
@@ -181,7 +185,7 @@ class TicTacToe:
         if self.is_tie_triple([BoardLocation.BL, BoardLocation.BM, BoardLocation.BR]):
             num_tie_areas += 1
 
-        # diagonals
+        # diagonals (Top-left to bottom-right, top-right to bottom left)
         if self.is_tie_triple([BoardLocation.TL, BoardLocation.M, BoardLocation.BR]):
             num_tie_areas += 1
 
