@@ -54,13 +54,13 @@ class TicTacToe:
     def next_player_selection(self):
         """Ask the current player to pick a square"""
         self.display_game_board()
-        location_name: str = ''
+        location_description: str = ''
         while True:
             selection: str = input(
-                f"{self.player}: which square do you want? (TL,TM, TR, ML, M, MR, BL, BM, BR)>").upper()
+                f"{self.player}: which square do you want? (TL, TM, TR, ML, M, MR, BL, BM, BR)>").upper()
             try:
-                location = BoardLocation[selection]
-                location_name = location.name
+                location = BoardLocation[selection]                
+                location_description = location.__str__()
             except KeyError:
                 print(f'{selection} is not valid. Try again.')
                 continue
@@ -71,7 +71,7 @@ class TicTacToe:
                 break
 
         if location is not None:
-            print(f'Player {self.player} chose {location_name}')
+            print(f'Player {self.player} chose {location_description}')
             self.board[location] = self.player
             # self.display_game_board()
 
