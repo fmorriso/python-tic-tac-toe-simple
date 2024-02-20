@@ -42,11 +42,13 @@ class TicTacToe:
         #    (b) it is a tie
         while self.game_outcome == GameOutcome.IN_PROGRESS:
             self.next_player_selection()
-
             self.switch_player()
             self.game_outcome = self.get_game_status()
+            if self.game_outcome != GameOutcome.IN_PROGRESS:
+                print(f'The game has ended. Outcome: {self.game_outcome}')
 
     def next_player_selection(self):
+        """Ask the current player to pick a square"""
         self.display_game_board()
         while True:
             selection: str = input(
