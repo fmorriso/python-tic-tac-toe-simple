@@ -188,4 +188,4 @@ cython_debug/
 .idea/**/libraries
 
 # Visual Studio Code
-.vscode/
+.vscode/**
