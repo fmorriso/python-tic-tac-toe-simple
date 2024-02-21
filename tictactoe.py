@@ -42,9 +42,8 @@ class TicTacToe:
         #    (a) there is a winner or
         #    (b) it is a tie
         while self.game_outcome == GameOutcome.IN_PROGRESS:
-            self.next_player_selection()            
+            self.next_player_selection()
             self.game_outcome = self.check_for_winner()
-            # self.game_outcome = self.get_game_status()
             if self.game_outcome != GameOutcome.IN_PROGRESS:
                 print(f'The game has ended. Outcome: {self.game_outcome}')
                 break
@@ -59,7 +58,7 @@ class TicTacToe:
             selection: str = input(
                 f"{self.player}: which square do you want? (TL, TM, TR, ML, M, MR, BL, BM, BR)>").upper()
             try:
-                location = BoardLocation[selection]                
+                location = BoardLocation[selection]
                 location_description = location.__str__()
             except KeyError:
                 print(f'{selection} is not valid. Try again.')
@@ -139,12 +138,6 @@ class TicTacToe:
 
         # 6. if nobody has won and it's not a hopeless tie, the game is still in progress
         return GameOutcome.IN_PROGRESS
-
-    def get_game_status(self) -> GameOutcome:
-        """checks game status to see if the game is over and returns the outcome"""
-        # 1. check for vertical three-in-a-row for either player
-        status = self.check_for_winner()
-        return status
 
     def check_for_consecutive(self, first: BoardLocation, second: BoardLocation,
                               third: BoardLocation) -> GameOutcome:
