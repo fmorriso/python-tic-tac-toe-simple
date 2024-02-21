@@ -14,6 +14,6 @@ A simple Tic-Tac-Toe game with no GUI other than what the built-in print() state
 * 2024-02-15 - moved play again method inside the game and changed BoardLocation to inherit from IntEnum
 * 2024-02-16 - begin to design
 ## Tools
-* Python 3.12.2
+* Python 3.12.2 (minimum required level is 3.10 due to use of match statement)
 * PyCharm Community 2023.3.3
 * VSCode 1.86.1
