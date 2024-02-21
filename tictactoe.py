@@ -44,6 +44,7 @@ class TicTacToe:
             self.next_player_selection()
             self.game_outcome = self.check_for_winner()
             if self.game_outcome != GameOutcome.IN_PROGRESS:
+                self.display_game_board()
                 print(f'The game has ended. Outcome: {self.game_outcome}')
                 break
             else:
@@ -71,7 +72,6 @@ class TicTacToe:
         if location is not None:
             print(f'Player {self.player} chose {location_description}')
             self.board[location] = self.player
-            # self.display_game_board()
 
     def display_game_board(self) -> None:
         """Displays the current game board"""
@@ -164,6 +164,7 @@ class TicTacToe:
         #       1. any of the three verticals
         #       2. any of the three horizontals
         #       3. either of the two diagonals
+        #       4. the total number of unused squares is two or less
         num_tie_areas = 0
 
         # verticals (left, middle, right)
@@ -193,9 +194,15 @@ class TicTacToe:
         if self.is_tie_triple([BoardLocation.TR, BoardLocation.M, BoardLocation.BL]):
             num_tie_areas += 1
 
+        num_unused: int = 0
+        for location in BoardLocation:
+            if self.board[location] == PlayerType.NONE:
+                num_unused += 1
+
         # if all eight areas where a triple can occur have at least one open square,
+        # or there are two or less unused squares,
         # the game is hopelessly tied
-        return num_tie_areas == 8
+        return num_tie_areas == 8 or num_unused <= 1
 
     def is_tie_triple(self, triple=list[int]) -> bool:
         """Return true if it is impossible for either player to complete a triple
