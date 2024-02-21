@@ -1,5 +1,4 @@
 import random
-from telnetlib import TM
 
 from board_location import BoardLocation
 from game_outcome import GameOutcome
@@ -65,7 +64,7 @@ class TicTacToe:
                 continue
             who_has_this_location: PlayerType = PlayerType(self.board[location])
             if who_has_this_location != PlayerType.NONE:
-                print(f'Position {selection} is already occupied. Try a different location.')
+                print(f'Position {location_description} is already occupied. Try a different location.')
             else:
                 break
 
