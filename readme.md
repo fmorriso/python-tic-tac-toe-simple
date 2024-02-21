@@ -9,6 +9,7 @@ A simple Tic-Tac-Toe game with no GUI other than what the built-in print() state
   "X is the winner" or "it's a tie".
   I use several enumerations in this project to overcome this specific "code smell"
 ## Change Log
+* 2024-02-20 - Refined logic to spot hopelessly tied game earlier.
 * 2024-02-19 - Add more logic to determining winner, tie, in progress
 * 2024-02-14 - Initial start of coding
 * 2024-02-15 - moved play again method inside the game and changed BoardLocation to inherit from IntEnum
