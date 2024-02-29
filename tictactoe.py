@@ -122,7 +122,7 @@ class TicTacToe:
             return result
 
         # 3. check for Upper-Left to Bottom-Right three-in-a-row for either player
-        result = self.check_for_consecutive(BoardLocation.ML, BoardLocation.M, BoardLocation.MR)
+        result = self.check_for_consecutive(BoardLocation.TL, BoardLocation.M, BoardLocation.BR)
         if result != GameOutcome.IN_PROGRESS:
             return result
 

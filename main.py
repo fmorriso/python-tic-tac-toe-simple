@@ -10,8 +10,9 @@ def get_python_version() -> str:
 
 if __name__ == '__main__':
     print(f'Python version {get_python_version()}')
-
+    # call the constructor on class TicTacToe
     game = TicTacToe()
+
     # allow the game to be played multiple times if desired
     keep_playing: bool = True
     while keep_playing:
