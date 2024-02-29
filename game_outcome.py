@@ -1,3 +1,4 @@
+# WARNING: StrEnum requires python 3.11 or higher
 from enum import StrEnum
 
 

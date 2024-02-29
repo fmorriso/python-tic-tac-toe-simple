@@ -1,3 +1,4 @@
+# WARNING: IntEnum requires python 3.11 or higher
 from enum import IntEnum
 
 
