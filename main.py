@@ -9,7 +9,7 @@ def get_python_version() -> str:
 
 
 if __name__ == '__main__':
-    print(f'Python version {get_python_version()}')
+    print(f'Tic-Tac-Toe game using Python version {get_python_version()}')
     # call the constructor on class TicTacToe
     game = TicTacToe()
 
