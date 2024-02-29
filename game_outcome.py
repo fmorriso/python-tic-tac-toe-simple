@@ -1,7 +1,7 @@
-from enum import StrEnum
+from enum import Enum
 
 
-class GameOutcome(StrEnum):
+class GameOutcome(Enum):
     """The game outcome"""
     IN_PROGRESS = 'in progress'
     TIE = 'tie'

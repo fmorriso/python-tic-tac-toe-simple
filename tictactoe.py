@@ -45,7 +45,7 @@ class TicTacToe:
             self.game_outcome = self.check_for_winner()
             if self.game_outcome != GameOutcome.IN_PROGRESS:
                 self.display_game_board()
-                print(f'The game has ended. Outcome: {self.game_outcome}')
+                print(f'The game has ended. Outcome: {self.game_outcome.value}')
                 break
             else:
                 self.switch_player()
@@ -56,14 +56,19 @@ class TicTacToe:
         location_description: str = ''
         while True:
             selection: str = input(
-                f"{self.player}: which square do you want? (TL, TM, TR, ML, M, MR, BL, BM, BR)>").upper()
+                f"Player {self.player}: which square do you want? (TL, TM, TR, ML, M, MR, BL, BM, BR)>").upper()
             try:
                 location = BoardLocation[selection]
                 location_description = location.__str__()
             except KeyError:
                 print(f'{selection} is not valid. Try again.')
                 continue
-            who_has_this_location: PlayerType = PlayerType(self.board[location])
+            #who_has_this_location: PlayerType = PlayerType(self.board[location])
+            # print(f'type of location is {type(location)}')
+            # print(f'type of location is {type(location.value)}')
+            who_has_this_location: str = self.board[location.value]
+            # print(f'type of who_has_this_location is {type(who_has_this_location)}')
+            # print(f'type of PlayerType.NONE is {type(PlayerType.NONE)}')
             if who_has_this_location != PlayerType.NONE:
                 print(f'Position {location_description} is already occupied. Try a different location.')
             else:
@@ -71,13 +76,13 @@ class TicTacToe:
 
         if location is not None:
             print(f'Player {self.player} chose {location_description}')
-            self.board[location] = self.player
+            self.board[location.value] = self.player
 
     def display_game_board(self) -> None:
         """Displays the current game board"""
         print('-' * 13)
-        for i in [BoardLocation.TL, BoardLocation.ML, BoardLocation.BL]:
-            print(f'| {self.board[i]} | {self.board[i + 1]} | {self.board[i + 2]} |')
+        for i in [BoardLocation.TL.value, BoardLocation.ML.value, BoardLocation.BL.value]:
+            print(f'| {self.board[i].value} | {self.board[i + 1].value} | {self.board[i + 2].value} |')
             print('-' * 13)
 
     def switch_player(self) -> None:
@@ -140,12 +145,12 @@ class TicTacToe:
 
     def check_for_consecutive(self, first: BoardLocation, second: BoardLocation,
                               third: BoardLocation) -> GameOutcome:
-        if self.board[first] == PlayerType.X and \
-                self.board[second] == PlayerType.X and self.board[third] == PlayerType.X:
+        if self.board[first.value] == PlayerType.X and \
+                self.board[second.value] == PlayerType.X and self.board[third.value] == PlayerType.X:
             return GameOutcome.X_winner
 
-        if self.board[first] == PlayerType.O and \
-                self.board[second] == PlayerType.O and self.board[third] == PlayerType.O:
+        if self.board[first.value] == PlayerType.O and \
+                self.board[second.value] == PlayerType.O and self.board[third.value] == PlayerType.O:
             return GameOutcome.O_winner
 
         # if there are any unused areas in the board, the game is not over yet
@@ -196,7 +201,8 @@ class TicTacToe:
 
         num_unused: int = 0
         for location in BoardLocation:
-            if self.board[location] == PlayerType.NONE:
+            i: int = location.value
+            if self.board[i] == PlayerType.NONE:
                 num_unused += 1
 
         # if all eight areas where a triple can occur have at least one open square,
@@ -214,10 +220,12 @@ class TicTacToe:
         num_x: int = 0
         num_o: int = 0
         num_blank: int = 0
-        for i in triple:
-            if self.board[i] == PlayerType.X:
+        for pt in triple:
+            i: int = pt.value
+            # print(f'DEBUG: type(i)={type(i)}')
+            if self.board[i] == PlayerType.X.value:
                 num_x += 1
-            elif self.board[i] == PlayerType.O:
+            elif self.board[i] == PlayerType.O.value:
                 num_o += 1
             else:
                 num_blank += 1
